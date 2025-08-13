@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Table + Form</title>
+</head>
+<body>
+
+<!-- Table 5x5 -->
+<table border="1" cellpadding="5">
+  <tr>
+    <th>Days</th><th>Food</th><th>Work</th><th>Visit</th><th>Sleep</th>
+  </tr>
+  <tr><td>Saterday</td><td>Hotdoag</td><td>Qur'aan</td><td>Grand Ma</td><td>At 22h00</td></tr>
+  <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+  <tr><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+  <tr><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr>
+  <tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr>
+</table>
+
+<hr>
+
+<!-- Form with 5 fields -->
+<form onsubmit="return checkForm()">
+  <p>
+    Name: <input type="text" id="name" required>
+  </p>
+  <p>
+    Email: <input type="email" id="email" required>
+  </p>
+  <p>
+    Age: <input type="number" id="age" required>
+  </p>
+  <p>
+    Password: 
+    <input type="password" id="password" required>
+    <input type="checkbox" onclick="togglePw()"> Show
+  </p>
+  <p>
+    Comments: <input type="text" id="comments">
+  </p>
+  <p>
+    <button type="submit">Submit</button>
+  </p>
+</form>
+
+<script>
+function togglePw(){
+  let pw = document.getElementById("password");
+  pw.type = (pw.type === "password") ? "text" : "password";
+}
+
+function checkForm(){
+  let pw = document.getElementById("password").value;
+  if(pw.length < 6){
+    alert("Password must be at least 6 characters.");
+    return false;
+  }
+  alert("Form submitted!");
+  return true;
+}
+</script>
+
+</body>
+</html>

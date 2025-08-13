@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Form + Table</title>
+</head>
+<body>
+
+<!-- Form with 5 fields -->
+<form onsubmit="return checkForm()">
+  <p>
+    Name: <input type="text" id="name" required>
+  </p>
+  <p>
+    Email: <input type="email" id="email" required>
+  </p>
+  <p>
+    Age: <input type="number" id="age" required>
+  </p>
+  <p>
+    Password: 
+    <input type="password" id="password" required>
+    <input type="checkbox" onclick="togglePw()"> Show
+  </p>
+  <p>
+    Comments: <input type="text" id="comments">
+  </p>
+  <p>
+    <button type="submit">Submit</button>
+  </p>
+</form>
+
+<hr>
+
+<!-- Table 5x5 -->
+<table border="1" cellpadding="5">
+  <tr>
+    <th>Days</th>
+    <th>Food</th>
+    <th>Work</th>
+    <th>Visit</th>
+    <th>Sleep</th>
+  </tr>
+  <tr><td>Mon</td><td>Pizza</td><td>Office</td><td>Park</td><td>8 hrs</td></tr>
+  <tr><td>Tue</td><td>Pasta</td><td>Remote</td><td>Mall</td><td>7 hrs</td></tr>
+  <tr><td>Wed</td><td>Rice</td><td>Office</td><td>Friend</td><td>6 hrs</td></tr>
+  <tr><td>Thu</td><td>Burger</td><td>Remote</td><td>Beach</td><td>8 hrs</td></tr>
+  <tr><td>Fri

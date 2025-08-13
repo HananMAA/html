@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Password creation example</title>
+  <style>
+    :root{
+      --gap: 12px;
+      --muted: #666;
+      --bg: #f6f7fb;
+      --accent: #2563eb;
+      --good: #16a34a;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    }
+
+    body{
+      background: linear-gradient(180deg,#fff,#f3f6ff 60%);
+      padding: 28px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      min-height:100vh;
+    }
+    .card{
+      width: 420px;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 30px rgba(20,30,60,0.08);
+    }
+
+    h1{ margin:0 0 8px 0; font-size:18px; }
+    p.lead { margin:0 0 18px 0; color: var(--muted); font-size:13px }
+
+    label { display:block; font-size:13px; margin-bottom:6px; font-weight:600; }
+    .field {
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    input[type="password"],
+    input[type="text"]{
+      flex:1;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid #e6e9f2;
+      font-size:14px;
+      outline: none;
+    }
+    input:focus { box-shadow: 0 0 0 4px rgba(37,99,235,0.06); border-color: var(--accent); }
+
+    .toggle {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:var(--muted);
+      margin-left: 6px;
+    }
+    .meter {
+      margin-top:12px;
+      height:10px;
+      background: #eef2ff;
+      border-radius:8px;
+      overflow:hidden;
+    }
+    .meter > i {
+      display:block;
+      height:100%;
+      width:0%;
+      background: var(--bad);
+      transition: width .25s ease, background-color .25s ease;
+    }
+    .reqs {
+      margin-top:12px;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .reqs li { margin:6px 0; list-style:none; display:flex; gap:8px; align-items:center; }
+    .reqs li .dot{ width:12px; height:12px; border-radius:50%; background:#eee; display:inline-block; }
+    .reqs li.ok .dot{ background: var(--good); box-shadow: 0 0 0 3px rgba(22,163,74,0.08); }
+    .reqs li.warn .dot{ background: var(--warn); box-shadow: 0 0 0 3px rgba(245,158,11,0.08); }
+    .reqs li.bad .dot{ background: var(--bad); box-shadow: 0 0 0 3px rgba(239,68,68,0.08); }
+
+    .hint { font-size:12px; color:var(--muted); margin-top:10px; }
+
+    .btn {
+      margin-top:16px;
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:0;
+      background: var(--accent);
+      color:white;
+      font-weight:700;
+      cursor:pointer;
+      font-size:14px;
+    }
+    .btn:disabled { opacity:0.6; cursor:not-allowed; }
+
+    .error { color:var(--bad); font-size:13px; margin-top:10px; }
+
+    .match-indicator { font-size:13px; margin-left:8px; color:var(--muted); }
+    .match-indicator.ok { color: var(--good); font-weight:700; }
+    .match-indicator.bad { color: var(--bad); font-weight:700; }
+  </style>
+</head>
+<body>
+  <main class="card" aria-labelledby="title">
+    <h1 id="title">Create a password</h1>
+    <p class="lead">Enter a strong password that meets the requirements.</p>
+
+    <form id="pwForm" novalidate>
+      <div style="margin-bottom:12px;">
+        <label for="password">Password</label>
+        <div class="field">
+          <input id="password" aria-describedby="pwHelp" autocomplete="new-password" type="password" required />
+          <label class="toggle">
+            <input id="toggleShow" type="checkbox" aria-label="Show password" />
+            show
+          </label>
+        </div>
+
+        <div class="meter" aria-hidden="true">
+          <i id="meterBar"></i>
+        </div>
+
+        <ul class="reqs" id="requirements" aria-live="polite">
+          <li id="r-length" class="bad"><span class="dot" aria-hidden="true"></span> At least 10 characters</li>
+          <li id="r-lower" class="bad"><span class="dot" aria-hidden="true"></span> Lowercase letter</li>
+          <li id="r-upper" class="bad"><span class="dot" aria-hidden="true"></span> Uppercase letter</li>
+          <li id="r-number" class="bad"><span class="dot" aria-hidden="true"></span> Number (0–9)</li>
+          <li id="r-special" class="bad"><span class="dot" aria-hidden="true"></span> Special character (e.g. !@#$%)</li>
+        </ul>
+      </div>
+
+      <div style="margin-bottom:6px;">
+        <label for="confirm">Confirm password</label>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input id="confirm" autocomplete="new-password" type="password" required />
+          <span id="match" class="match-indicator" aria-live="polite">Not checked</span>
+        </div>
+      </div>
+
+      <div class="hint" id="pwHelp">Use a phrase or combination of characters that are easy for you to remember but hard to guess.</div>
+
+      <div id="error" class="error" role="alert" aria-live="assertive" style="display:none"></div>
+
+      <button id="submitBtn" class="btn" type="submit" disabled>Create account</button>
+    </form>
+  </main>
+
+  <script>
+    // Elements
+    const pw = document.getElementById('password');
+    const confirm = document.getElementById('confirm');
+    const toggle = document.getElementById('toggleShow');
+    const meterBar = document.getElementById('meterBar');
+    const reqs = {
+      length: document.getElementById('r-length'),
+      lower: document.getElementById('r-lower'),
+      upper: document.getElementById('r-upper'),
+      number: document.getElementById('r-number'),
+      special: document.getElementById('r-special')
+    };
+    const match = document.getElementById('match');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorEl = document.getElementById('error');
+    const form = document.getElementById('pwForm');
+
+    // Regex checks
+    const checks = {
+      lower: /[a-z]/,
+      upper: /[A-Z]/,
+      number: /[0-9]/,
+      special: /[^A-Za-z0-9]/
+    };
+
+    function evaluatePassword(value){
+      // score components: length, lower, upper, number, special
+      const results = {
+        length: value.length >= 10,
+        lower: checks.lower.test(value),
+        upper: checks.upper.test(value),
+        number: checks.number.test(value),
+        special: checks.special.test(value)
+      };
+      // strength score 0..5
+      const score = Object.values(results).reduce((s,v) => s + (v?1:0), 0);
+      return { results, score };
+    }
+
+    function updateUI(){
+      const v = pw.value;
+      const { results, score } = evaluatePassword(v);
+
+      // Update requirement list classes
+      reqs.length.className = results.length ? 'ok' : 'bad';
+      reqs.lower.className  = results.lower  ? 'ok' : 'bad';
+      reqs.upper.className  = results.upper  ? 'ok' : 'bad';
+      reqs.number.className = results.number ? 'ok' : 'bad';
+      reqs.special.className= results.special? 'ok' : 'bad';
+
+      // Meter visual
+      const pct = Math.min(100, (score/5)*100);
+      meterBar.style.width = pct + '%';
+      if (score <= 1) {
+        meterBar.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bad');
+      } else if (score <= 3) {
+        meterBar.style.background = getComputedStyle(document.documentElement).getPropertyValue('--warn');
+      } else {
+        meterBar.style.background = getComputedStyle(document.documentElement).getPropertyValue('--good');
+      }
+
+      // Confirm match indicator
+      if (!confirm.value && !v) {
+        match.textContent = 'Not checked';
+        match.className = 'match-indicator';
+      } else if (v && confirm.value && v === confirm.value) {
+        match.textContent = 'Passwords match';
+        match.className = 'match-indicator ok';
+      } else {
+        match.textContent = 'Passwords do not match';
+        match.className = 'match-indicator bad';
+      }
+
+      // Enable submit only if all requirements passed and match
+      const allReqs = Object.values(results).every(Boolean);
+      const isMatch = v && confirm.value && v === confirm.value;
+      submitBtn.disabled = !(allReqs && isMatch);
+
+      // Hide any visible error while typing
+      if (errorEl.style.display !== 'none') {
+        errorEl.style.display = 'none';
+        errorEl.textContent = '';
+      }
+    }
+
+    // Toggle show/hide
+    toggle.addEventListener('change', () => {
+      const t = toggle.checked ? 'text' : 'password';
+      pw.type = t;
+      confirm.type = t;
+    });
+
+    // Live updates
+    pw.addEventListener('input', updateUI);
+    confirm.addEventListener('input', updateUI);
+
+    // Submit handler with final validation
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const value = pw.value;
+      const { results } = evaluatePassword(value);
+
+      // Re-check
+      if (!Object.values(results).every(Boolean)) {
+        errorEl.style.display = 'block';
+        errorEl.textContent = 'Password does not meet all requirements.';
+        return;
+      }
+      if (value !== confirm.value) {
+        errorEl.style.display = 'block';
+        errorEl.textContent = 'Passwords do not match.';
+        return;
+      }
+
+      // For demonstration only: do not send real passwords via alert in production
+      // Replace this block with a real submission (fetch/post) to your server over HTTPS.
+      alert('Password accepted — form ready to submit to the server (demo).');
+
+      // reset form (optional)
+      form.reset();
+      updateUI();
+    });
+
+    // initial UI update
+    updateUI();
+  </script>
+</body>
+</html>
+, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+</html>
